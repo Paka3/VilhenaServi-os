@@ -15,6 +15,9 @@
     },
     "onesignal-cordova-plugin": {
       "PACKAGE_NAME": "br.com.guiacomercial"
+    },
+    "cordova-plugin-wkwebview-engine": {
+      "PACKAGE_NAME": "br.com.vilhenaservicos"
     }
   },
   "dependent_plugins": {}
