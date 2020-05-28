@@ -38,7 +38,9 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.3.4",
     "cordova-plugin-network-information": "2.0.2",
     "onesignal-cordova-plugin": "2.7.0",
-    "cordova-plugin-wkwebview-engine": "1.2.1"
+    "cordova-plugin-wkwebview-engine": "1.2.1",
+    "cordova-plugin-wkwebview-file-xhr": "2.1.4",
+    "cordova-plugin-wkwebviewxhrfix": "0.1.0"
 }
 // BOTTOM OF METADATA
 });

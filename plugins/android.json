@@ -18,6 +18,12 @@
     },
     "cordova-plugin-wkwebview-engine": {
       "PACKAGE_NAME": "br.com.vilhenaservicos"
+    },
+    "cordova-plugin-wkwebview-file-xhr": {
+      "PACKAGE_NAME": "br.com.vilhenaservicos"
+    },
+    "cordova-plugin-wkwebviewxhrfix": {
+      "PACKAGE_NAME": "br.com.vilhenaservicos"
     }
   },
   "dependent_plugins": {}
