@@ -121,6 +121,60 @@ var app = new Framework7({
 						
 						var networkState = navigator.connection.type;
 
+						// Verifica disponibilidade do anunciate logado
+						const statusToggle = document.querySelector('.status-toggle');
+						let hasEventListener = false;
+
+						setInterval(() => {
+							const anunciante_id = localStorage.getItem('anunciante_id');
+
+							if (anunciante_id) {
+								const statusToggleBox = document.querySelector('.status-toggle-box');
+								statusToggleBox.classList.remove('d-none');
+
+								if (!hasEventListener) {
+									statusToggle.addEventListener('change', (e) => {
+										const isChecked = e.target.checked;
+			
+										$.ajax({
+											url: 'https://vilhenaservicos.com.br/App/atualizar-disponibilidade.php',
+											type: 'POST',
+											crossDomain: true,
+											data: { chave: 'ok', anunciante_id, is_available: isChecked },
+											success: () => {
+												updateRadioButtonState(isChecked);
+											}
+										});
+									});
+
+									hasEventListener = true;
+								}
+
+								$.ajax({
+									url: 'https://vilhenaservicos.com.br/App/carregar-disponibilidade.php',
+									type: 'POST',
+									data: { chave: 'ok', anunciante_id },
+									crossDomain: true,
+									success: (res) => {
+										const isAvailable = res == '1';
+										updateRadioButtonState(isAvailable);
+									},
+								});
+
+								const updateRadioButtonState = (state) => {
+									statusToggle.checked = state;
+								};
+							} else {
+								const statusToggleBox = document.querySelector('.status-toggle-box');
+								statusToggleBox.classList.add('d-none');
+
+								if (hasEventListener) {
+									statusToggle.removeEventListener('change');
+									hasEventListener = false;
+								}
+							}
+						}, 2000);
+
 					 //DAR NOMES PARA OS STATUS DE REDE
                     var states = {}; 
                     states[Connection.UNKNOWN] = 'desconhecida'; 
@@ -158,76 +212,75 @@ var app = new Framework7({
                }
         },
 		{
-			
-        //    path: '/cidade/',
-      //      url: 'cidade.html',
-        //    on: {
-          //      pageInit: function (event, page) {
+            path: '/cidade/',
+            url: 'cidade.html',
+            on: {
+                pageInit: function (event, page) {
 				
-			//			app.dialog.preloader('Aguarde');
-				//				$.ajax({
-                  //              type: 'POST',
-                    //            data: {appvalidation:'oi'},
-                      //          url: 'https://vilhenaservicos.com.br/App/carregar-cidades.php',
-                        //        crossDomain: true,
-//
-  //                              success: function (respost) {
-//
-  //                                  if (respost == 0) {
-    //                                    app.dialog.close();
-//
-  //                                          app.dialog.alert('Houve um problema. Carregamento não foi efetuado.', '<i class="mdi mdi-alert-circle"></i> <b>Falhou Carregamento!</b>');
-    //                                        return false;
-      //                             
-        //                            }
-//
-  //                                  if (respost !== 0) {
-    //                                    app.dialog.close();
-      //                                  
-        //                                //ALISTA OS FORNECEDORES
-          //                              $("#Qualcidade").html(respost);                                      
-			//							$("#Qualcidade").val("");
-              //                        
-                //                    }
-//
-  //                                  
-//
-  //                              },
-//
-  //                              error: function (erro) {
-    //                                app.dialog.close();
-                                 
-      //                                  app.dialog.alert('Falha em se comunicar com servidor. Por favor, tente novamente!');
-                                   
-        //                            
-                                   
-          //                      }
+						app.dialog.preloader('Aguarde');
+								$.ajax({
+                                type: 'POST',
+                                data: {appvalidation:'oi'},
+                                url: 'https://vilhenaservicos.com.br/App/carregar-cidades.php',
+                                crossDomain: true,
 
-            //                });
+                                success: function (respost) {
+
+                                    if (respost == 0) {
+                                        app.dialog.close();
+
+                                            app.dialog.alert('Houve um problema. Carregamento não foi efetuado.', '<i class="mdi mdi-alert-circle"></i> <b>Falhou Carregamento!</b>');
+                                            return false;
+                                   
+                                    }
+
+                                    if (respost !== 0) {
+                                        app.dialog.close();
+                                        
+                                        //ALISTA OS FORNECEDORES
+                                        $("#Qualcidade").html(respost);                                      
+										$("#Qualcidade").val("");
+                                      
+                                    }
+
+                                    
+
+                                },
+
+                                error: function (erro) {
+                                    app.dialog.close();
+                                 
+                                        app.dialog.alert('Falha em se comunicar com servidor. Por favor, tente novamente!');
+                                   
+                                    
+                                   
+                                }
+
+                            });
 							
 							//QUANDO SELECIONAR CIDADE APARECER BOTÃO
-					//		$('#Qualcidade').on('change', function() {
-						//		var qualcidade = $('#Qualcidade').val();
+							$('#Qualcidade').on('change', function() {
+								var qualcidade = $('#Qualcidade').val();
 								
-						//		if (qualcidade==""){
-						//			$("#botaoCidade").addClass("display-none");
-							//	}else{
-						//			$("#botaoCidade").removeClass("display-none");
-					//			}							
-				//			});
+								if (qualcidade==""){
+									$("#botaoCidade").addClass("display-none");
+								}else{
+									$("#botaoCidade").removeClass("display-none");
+								}							
+							});
 							
 							//CLICOU PARA SEGUIR EM FRENTE
-			//				$('#vamosLa').on('click', function() {
-							//	var idcidade=$('#Qualcidade').val();
-						//		//SETANDO PARA CIDADE ESCOLHIDA
-					//			localStorage.setItem("idCidade",idcidade);
-				//				app.views.main.router.navigate('/home/');
-			//				});
+							$('#vamosLa').on('click', function() {
+								var idcidade=$('#Qualcidade').val();
+								//SETANDO PARA CIDADE ESCOLHIDA
+								localStorage.setItem("idCidade",idcidade);
+								app.views.main.router.navigate('/home/');
+							});
 
-          //          }
-        //       }
-      //  },
-	//	{
+                    }
+               }
+        },
+		{
             path: '/destino/',
             url: 'destino.html',
             on: {
@@ -1426,6 +1479,7 @@ requestAnimationFrame(loop);
                                         var dados = JSON.parse(respost);
 
                                         //ARMAZENA CADA ITEM DO USUARIO EM UM LOCALSTORAGE
+                                        localStorage.setItem("anunciante_id", dados.anunciante_id);
                                         localStorage.setItem("nome", dados.nome);
                                         localStorage.setItem("login", dados.email);
                                         localStorage.setItem("senha", dados.senha);
@@ -1672,7 +1726,7 @@ function onBackKeyDown() {
 	}
 	
 	if (nome=='/skins/'){
-	app.views.main.router.navigate('/configuracoes/');	
+	app.views.main.router.navigate('/destino/');	
 	}
 	
 	if (nome=='/anunciante/'){
@@ -1683,7 +1737,7 @@ function onBackKeyDown() {
 	app.views.main.router.back('/destino/');
 	}
 	
-	app.dialog.confirm('Tem certeza que quer sair?','<b>Sair</b>', function(){
+	app.dialog.confirm('Tem certeza que deseja sair?','<b>Sair</b>', function(){
 	window.navigator.app.exitApp();
 });
 	

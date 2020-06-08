@@ -48,4 +48,16 @@
   color: #8e8e93;
 }
 
+.status-toggle-box {
+  padding: 16px;
+}
 
+.status-toggle-box .item-inner {
+  padding-bottom: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.d-none {
+  display: none !important;
+}
